@@ -9,7 +9,11 @@ public class DBUtil {
     // Adjust DB name / user / password if you changed them
     private static final String URL =
             "jdbc:mysql://localhost:3306/loggydb?useSSL=false&serverTimezone=UTC";
-    private static final String USER =
+            
+            // DB fields for testing connection
+            //private static final String USER = "root";
+            //private static final String PASSWORD = "";
+   private static final String USER =
         System.getenv().getOrDefault("LOGGY_DB_USER", "root");
 
     private static final String PASSWORD =

@@ -1,0 +1,48 @@
+# =====================
+# Maven
+# =====================
+target/
+*.log
+*.tmp
+
+# =====================
+# Java
+# =====================
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+
+# =====================
+# VS Code
+# =====================
+.vscode/
+.history/
+
+# =====================
+# IntelliJ / Eclipse (in case opened accidentally)
+# =====================
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+
+# =====================
+# OS files
+# =====================
+.DS_Store
+Thumbs.db
+
+# =====================
+# Tomcat
+# =====================
+tomcat/
+work/
+logs/
+
+# =====================
+# Environment / secrets
+# =====================
+.env

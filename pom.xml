@@ -12,15 +12,23 @@
 
     <name>loggy-lab4-041055519</name>
 
-    <dependencies>
-        <!-- Servlet API, provided by Tomcat at runtime -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+<dependencies>
+    <!-- Servlet API provided by Tomcat -->
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>4.0.1</version>
+        <scope>provided</scope>
+    </dependency>
+
+    <!-- MySQL JDBC driver -->
+    <dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.33</version>
+</dependency>
+</dependencies>
+
 
     <build>
         <!-- This will be the WAR file name -->

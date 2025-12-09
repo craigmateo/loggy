@@ -1,7 +1,8 @@
 package ca.cfrayne.loggy.web;
 
 import ca.cfrayne.loggy.model.TextLog;
-import ca.cfrayne.loggy.service.InMemoryLogService;
+import ca.cfrayne.loggy.service.JdbcLogService;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,55 +16,62 @@ import java.util.List;
 @WebServlet("/loggy")
 public class LoggyServlet extends HttpServlet {
 
-    private final InMemoryLogService logService = InMemoryLogService.getInstance();
+    private final JdbcLogService logService = new JdbcLogService();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
 
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html;charset=UTF-8");
+    req.setCharacterEncoding("UTF-8");
+    resp.setContentType("text/html;charset=UTF-8");
 
-        String action = req.getParameter("action");
-        String message = null;
-        TextLog logToEdit = null;
+    String action = req.getParameter("action");
+    String message = null;
+    TextLog logToEdit = null;
+    java.util.List<TextLog> allLogs = java.util.Collections.emptyList();
 
-        try {
-            if ("delete".equals(action)) {
-                long id = Long.parseLong(req.getParameter("id"));
-                boolean deleted = logService.delete(id);
-                message = deleted ? "Log deleted successfully." : "Log not found.";
-            } else if ("edit".equals(action)) {
-                long id = Long.parseLong(req.getParameter("id"));
-                logToEdit = logService.findById(id);
-                if (logToEdit == null) {
-                    message = "Log not found for editing.";
-                }
+    try {
+        if ("delete".equals(action)) {
+            long id = Long.parseLong(req.getParameter("id"));
+            boolean deleted = logService.delete(id);
+            message = deleted ? "Log deleted successfully." : "Log not found.";
+        } else if ("edit".equals(action)) {
+            long id = Long.parseLong(req.getParameter("id"));
+            logToEdit = logService.findById(id);
+            if (logToEdit == null) {
+                message = "Log not found for editing.";
             }
-        } catch (NumberFormatException e) {
-            message = "Invalid ID.";
         }
 
-        List<TextLog> allLogs = logService.findAll();
+        allLogs = logService.findAll();
 
-        try (PrintWriter out = resp.getWriter()) {
-            renderPage(out, message, logToEdit, allLogs);
-        }
+    } catch (NumberFormatException e) {
+        message = "Invalid ID.";
+    } catch (java.sql.SQLException e) {
+        message = "Database error: " + e.getMessage();
+        e.printStackTrace();
     }
 
+    try (PrintWriter out = resp.getWriter()) {
+        renderPage(out, message, logToEdit, allLogs);
+    }
+}
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
 
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html;charset=UTF-8");
+    req.setCharacterEncoding("UTF-8");
+    resp.setContentType("text/html;charset=UTF-8");
 
-        String idParam = req.getParameter("id");
-        String title = req.getParameter("title");
-        String content = req.getParameter("content");
+    String idParam = req.getParameter("id");
+    String title = req.getParameter("title");
+    String content = req.getParameter("content");
 
-        String message;
+    String message;
+    java.util.List<TextLog> allLogs = java.util.Collections.emptyList();
 
+    try {
         if (title == null || title.isBlank() || title.length() > 60 ||
             content == null || content.isBlank() || content.length() > 120) {
             message = "Validation error: Title (max 60) and Content (max 120) are required.";
@@ -73,21 +81,26 @@ public class LoggyServlet extends HttpServlet {
             message = "Log created successfully.";
         } else {
             // UPDATE
-            try {
-                long id = Long.parseLong(idParam);
-                boolean updated = logService.update(id, title, content);
-                message = updated ? "Log updated successfully."
-                                  : "Could not find log to update.";
-            } catch (NumberFormatException e) {
-                message = "Invalid ID for update.";
-            }
+            long id = Long.parseLong(idParam);
+            boolean updated = logService.update(id, title, content);
+            message = updated ? "Log updated successfully."
+                              : "Could not find log to update.";
         }
 
-        List<TextLog> allLogs = logService.findAll();
-        try (PrintWriter out = resp.getWriter()) {
-            renderPage(out, message, null, allLogs);
-        }
+        allLogs = logService.findAll();
+
+    } catch (NumberFormatException e) {
+        message = "Invalid ID.";
+    } catch (java.sql.SQLException e) {
+        message = "Database error: " + e.getMessage();
+        e.printStackTrace();
     }
+
+    try (PrintWriter out = resp.getWriter()) {
+        renderPage(out, message, null, allLogs);
+    }
+}
+
 
     private void renderPage(PrintWriter out, String message,
                             TextLog logToEdit, List<TextLog> allLogs) {

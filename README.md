@@ -1,6 +1,6 @@
-# Loggy Lab 4 – 041055519
+# Loggy
 
-Mini microblogging web application for the "Loggy" assignment.  
+Mini microblogging web application.  
 Implements a Java Servlet–based web app where users can create, edit, and delete short text logs.
 
 ---

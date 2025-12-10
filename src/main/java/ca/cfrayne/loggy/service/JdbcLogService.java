@@ -83,15 +83,16 @@ public class JdbcLogService {
     }
 
     public boolean delete(long id) throws SQLException {
-        String sql = "DELETE FROM logs WHERE id = ?";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+    String sql = "DELETE FROM logs WHERE id = ?";
 
-            ps.setLong(1, id);
-            ps.setLong(2, id);
-            ps.setLong(1, id); // (make sure it’s only set once correctly in your code)
-            int rows = ps.executeUpdate();
-            return rows > 0;
-        }
+    try (Connection conn = DBUtil.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setLong(1, id);  // only ONE parameter
+
+        int rows = ps.executeUpdate();
+        return rows > 0;
     }
+}
+
 }

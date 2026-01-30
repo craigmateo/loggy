@@ -1,48 +1,58 @@
-# =====================
-# Maven
-# =====================
-target/
-*.log
-*.tmp
+/bin/
+#
+# Project specific excludes
+#
 
-# =====================
-# Java
-# =====================
-*.class
+tomcat
+
+#
+# Default excludes
+#
+!mysql-connector-java-8.0.20.jar
+
+# Binaries
+*.7z
+*.dmg
+*.gz
+*.iso
 *.jar
+*.rar
+*.tar
+*.zip
 *.war
 *.ear
-hs_err_pid*
+*.sar
+*.class
 
-# =====================
-# VS Code
-# =====================
-.vscode/
-.history/
+# Maven
+target/
 
-# =====================
-# IntelliJ / Eclipse (in case opened accidentally)
-# =====================
-.idea/
+# IntelliJ project files
 *.iml
-.project
-.classpath
+*.iws
+*.ipr
+.idea/
+
+# eclipse project file
 .settings/
+.classpath
+.project
 
-# =====================
-# OS files
-# =====================
+# NetBeans specific
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+
+# OS
 .DS_Store
-Thumbs.db
 
-# =====================
-# Tomcat
-# =====================
-tomcat/
-work/
-logs/
-
-# =====================
-# Environment / secrets
-# =====================
-.env
+# Misc
+*.swp
+release.properties
+pom.xml.releaseBackup
+pom.xml.tag
